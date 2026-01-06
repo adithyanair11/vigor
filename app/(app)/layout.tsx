@@ -1,16 +1,19 @@
-import { SanityLive } from '@/sanity/lib/live'
-import { ClerkProvider } from '@clerk/nextjs'
-import React from 'react'
-import { AppHeader } from './app/layout/AppHeader'
+import { AppHeader } from "@/components/app/layout/AppHeader";
+import { OnboardingGuard } from "@/components/app/onboarding/OnBoardingGaurd";
+import { SanityLive } from "@/sanity/lib/live";
+import { ClerkProvider } from "@clerk/nextjs";
+import React from "react";
 
-function AppLayout({children} : {children: React.ReactNode}) {
+function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
+      <OnboardingGuard>
         <AppHeader />
         {children}
-        <SanityLive />
+      </OnboardingGuard>
+      <SanityLive />
     </ClerkProvider>
-  )
+  );
 }
 
-export default AppLayout
+export default AppLayout;
