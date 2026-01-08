@@ -110,6 +110,13 @@ export const SESSIONS_BY_ACTIVITY_QUERY = defineQuery(`*[
 // The client then uses Haversine distance for precise circular radius filtering.
 //
 // Other filters are optional - pass empty string/array to skip
+
+export const DEBUG_SESSIONS_QUERY = defineQuery(`*[_type == "classSession"]{
+  _id,
+  startTime,
+  status
+}`);
+
 export const FILTERED_SESSIONS_QUERY = defineQuery(`*[
   _type == "classSession"
   && startTime > now()

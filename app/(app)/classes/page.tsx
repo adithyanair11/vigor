@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { format } from "date-fns";
 import { sanityFetch } from "@/sanity/lib/live";
 import {
+    DEBUG_SESSIONS_QUERY,
   FILTERED_SESSIONS_QUERY,
   SEARCH_SESSIONS_QUERY,
 } from "@/sanity/lib/queries/sessions";
@@ -115,9 +116,15 @@ export default async function ClassesPage({ searchParams }: PageProps) {
     venueNameQuery,
   ]);
 
+  console.log("RAW sessionsResult", sessionsResult);
+
+
   const allSessions = sessionsResult.data;
   const categories = categoriesResult.data;
   const venueName = venueNameResult.data?.name || null;
+
+
+//   console.log("allSessions", allSessions);
   // Filter out null values from booked session IDs
   const bookedIds: (string | null)[] = bookedSessionsResult.data || [];
   const filteredBookedIds = bookedIds.filter((id): id is string => id !== null);
@@ -146,6 +153,7 @@ export default async function ClassesPage({ searchParams }: PageProps) {
   // Group sessions by day (already sorted by time from GROQ)
   type SessionWithDistance = (typeof sessionsWithDistance)[number];
   const groupedByDay = new Map<string, SessionWithDistance[]>();
+
   for (const session of sessionsWithDistance) {
     const dateKey = format(new Date(session.startTime), "yyyy-MM-dd");
     const existing = groupedByDay.get(dateKey) || [];
@@ -153,6 +161,7 @@ export default async function ClassesPage({ searchParams }: PageProps) {
   }
 
   const groupedArray = Array.from(groupedByDay.entries());
+
 
   // Extract venues for map display
   const venuesForMap = sessionsWithDistance
